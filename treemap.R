@@ -34,6 +34,8 @@ df <- merge(merge(df, dept_tot, by="department"), job_tot, by="job_titles")
 df$tot_salary_dept <- do.call("paste", c(df[c("department", "tot_salary_dept")], sep = "\n"))
 df$tot_salary_job <- do.call("paste", c(df[c("job_titles", "tot_salary_job")], sep = "\n"))
 
+
+
 # basic treemap
 chicago_treemap <- treemap(df,
                            index=c("tot_salary_dept","tot_salary_job"),
