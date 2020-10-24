@@ -1,1 +1,1 @@
-# budget-treemap
+# salary-treemap
