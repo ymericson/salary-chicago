@@ -8,6 +8,8 @@ library(stringr)
 library(dplyr)
 library(tidyverse)
 library(htmltools)
+library(here)
+library(htmlwidgets)
 
 # get and clean data
 df <- read.socrata("https://data.cityofchicago.org/resource/n4bx-5kf6.json")
@@ -76,12 +78,5 @@ chicago_treemap <- treemap(df,
 # make it interactive ("rootname" becomes the title of the plot):
 chicago_inter <- d3tree2(chicago_treemap,  rootname="Salaries")
 
-
-
-
-
-
-
 # save the widget
-# library(htmlwidgets)
-# saveWidget(inter, file=paste0( getwd(), "/HtmlWidget/interactiveTreemap.html"))
+saveWidget(chicago_inter, file = here("/salary-treemap/ChicagoTreemap.html"))
