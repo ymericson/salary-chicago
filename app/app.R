@@ -21,7 +21,7 @@ ui <- fluidPage(
     sidebarLayout(
         sidebarPanel(id="sidebar",
             helpText("Filter employees with the following:"),
-            textInput("lname",
+            textInput("name",
                       label = "Name", 
                       placeholder = "Last Name"),
             selectInput("dept",
@@ -33,10 +33,10 @@ ui <- fluidPage(
                         label = "Salary Range",
                         min = 0, max = max(df_app$`Salary`), 
                         value = c(0, max(df_app$`Salary`))),
-            actionButton("clear", "Clear Results")
+            actionButton("clear", "Clear")
             ),
         mainPanel(
-            textOutput("selected_var"),
+            textOutput("name"),
             textOutput("range"),
             dataTableOutput("data")
         )
@@ -46,7 +46,7 @@ ui <- fluidPage(
 filter_var <- function(x, val) {
     if (is.numeric(val)) {
         x >= val[1] & x <= val[2]
-    } else if (is.character(val)) {
+    } else if (length(val) != 0) {
         x %in% val
     } else {
         TRUE
@@ -55,6 +55,7 @@ filter_var <- function(x, val) {
 
 server <- function(input, output, session) {
     selected <- reactive({
+        str_detect(str_split_fixed(df_app$Name, ",", 2)[,1], str_to_title(input$name)) &
         filter_var(df_app$Department, input$dept) &
         filter_var(df_app$Salary, input$range)
     })
@@ -65,12 +66,10 @@ server <- function(input, output, session) {
                                              rownames = FALSE,
                                              selection = 'none'
                                              ) %>%
-                                       formatCurrency("Salary")
+                                       formatCurrency("Salary") 
     )
+    output$name <- renderText({ input$name })
 }
-
-
-
 
 
 
