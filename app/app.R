@@ -1,12 +1,3 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
 library(DT)
 
@@ -22,14 +13,11 @@ ui <- fluidPage(
             font-size: 13px;
             }
         #mytable tr:hover {
-             background-color: #e6f0ff
-             }
-        
-             
-             ')
+            background-color: #e6f0ff
+            }
+            ')
     )),
     titlePanel("App"),
-    
     sidebarLayout(
         sidebarPanel(id="sidebar",
             helpText("Filter employees with the following:"),
@@ -43,49 +31,45 @@ ui <- fluidPage(
                         multiple = TRUE),
             sliderInput("range", 
                         label = "Salary Range",
-                        min = 0, max = max(df_app$`Salary`), value = c(0, 0)),
-            actionButton("search", "Search"),
+                        min = 0, max = max(df_app$`Salary`), 
+                        value = c(0, max(df_app$`Salary`))),
             actionButton("clear", "Clear Results")
             ),
         mainPanel(
-            dataTableOutput("mytable"),
             textOutput("selected_var"),
-            textOutput("min_max")
+            textOutput("range"),
+            dataTableOutput("data")
         )
     )
 )
 
-server <- function(input, output) {
-    
-    output$mytable <- renderDataTable(
-        datatable(df_app, 
-                  options = list(
-                   
-                      pageLength = 30, lengthChange = FALSE, searching = FALSE),
-                  rownames = FALSE,
-                  selection = 'none'
-                  ) %>% 
-            formatCurrency("Salary")
-        )
-    
-    # 
-    # output$mytable = renderDataTable(
-    #     datatable(df_app %>% formatCurrency("Salary"),
-    #     options = list(pageLength = 30, lengthChange = FALSE),
-    #     rownames = FALSE)
-    # )
-}    
-    
-#     # reactive expression
-#     text_reactive <- eventReactive( input$search, {
-#         input$dept
-#     })
-#     
-#     # text output
-#     output$selected_var <- renderText({
-#         text_reactive()
-#     })
-# }
+filter_var <- function(x, val) {
+    if (is.numeric(val)) {
+        x >= val[1] & x <= val[2]
+    } else if (is.character(val)) {
+        x %in% val
+    } else {
+        TRUE
+        }
+} 
+
+server <- function(input, output, session) {
+    selected <- reactive({
+        filter_var(df_app$Department, input$dept) &
+        filter_var(df_app$Salary, input$range)
+    })
+    output$data <- renderDataTable(datatable(df_app[selected(),],
+                                             options = list(pageLength = 25,
+                                                            lengthChange = FALSE,
+                                                            searching = FALSE),
+                                             rownames = FALSE,
+                                             selection = 'none'
+                                             ) %>%
+                                       formatCurrency("Salary")
+    )
+}
+
+
 
 
 
