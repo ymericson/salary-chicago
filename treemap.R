@@ -10,6 +10,8 @@ library(tidyverse)
 library(htmltools)
 library(here)
 library(htmlwidgets)
+library(shiny)
+library(data.table)
 
 # get and clean data
 df <- read.socrata("https://data.cityofchicago.org/resource/n4bx-5kf6.json")
@@ -18,7 +20,21 @@ df[cols.num] <- sapply(df[cols.num],as.numeric)
 df$annual_salary <- ifelse(is.na(df$annual_salary), df$frequency_description * df$hourly_rate * 50, df$annual_salary)
 df$name <- str_to_title(df$name)
 df$department <- str_to_title(df$department)
+df$job_titles <-gsub('^([0-9]+)|([IVXLCM]+)\\.?$','', df$job_titles)
+df$job_titles<- str_replace_all(df_app$job_titles,
+                               c("ADMINISTRATIVE" = "ADMIN",
+                                 "COMMUNICATIONS" = "COMM",
+                                 "ENGINEER" = "ENG",
+                                 "TECHNICIAN" = "TECH",
+                                 "OPERATIONS" = "OPS",
+                                 "MAINTENANCE" = "MAINT",
+                                 "PERFORMANCE" = "PERF",
+                                 "CORPORATION" = "CORP",
+                                 "INFORMATION" = "INFO",
+                                 "SUPERINTENDENT" = "SPRNDT"
+                                 ))
 df$job_titles <- str_to_title(df$job_titles)
+df$job_titles <- gsub("\\s*\\([^\\)]+\\)","",as.character(df$job_titles))
 df <- df %>% select("name", "department", "job_titles", "annual_salary")
 
 # change smaller departments to "OTHER DEPTS"
@@ -75,8 +91,9 @@ chicago_treemap <- treemap(df,
                            )  
 )            
 
-# make it interactive ("rootname" becomes the title of the plot):
-chicago_inter <- d3tree2(chicago_treemap,  rootname="Salaries")
+# make it interactive
+chicago_inter <- d3tree2(chicago_treemap,  rootname="Salaries",
+                         height = 460, width = 900)
 
 # save the widget
 saveWidget(chicago_inter, file = here("/salary-treemap/ChicagoTreemap.html"))

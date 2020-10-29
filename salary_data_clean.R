@@ -21,8 +21,14 @@ df_app$annual_salary <- ifelse(is.na(df_app$annual_salary),
                                df_app$annual_salary)
 df_app$name <- str_to_title(df_app$name)
 df_app$department <- str_to_title(df_app$department)
+df_app$job_titles <-gsub('^([0-9]+)|([IVXLCM]+)\\.?$','', df_app$job_titles)
+df_app$job_titles <- str_replace_all(df_app$job_titles,
+                                     c("DIR" = "DIRECTOR",
+                                       "SUPVSR" = "SUPERVISOR",
+                                       "MGR" = "MANAGER"))
 df_app$job_titles <- str_to_title(df_app$job_titles)
 df_app$job_titles <- gsub("\\s*\\([^\\)]+\\)","",as.character(df_app$job_titles))
+
 df_app <- df_app %>% select("name", "department", "job_titles", "annual_salary") %>%
   mutate(department=recode(department,
                            "Admin Hearng" = "Administrative Hearings",
