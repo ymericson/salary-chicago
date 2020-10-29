@@ -22,6 +22,7 @@ df_app$annual_salary <- ifelse(is.na(df_app$annual_salary),
 df_app$name <- str_to_title(df_app$name)
 df_app$department <- str_to_title(df_app$department)
 df_app$job_titles <- str_to_title(df_app$job_titles)
+df_app$job_titles <- gsub("\\s*\\([^\\)]+\\)","",as.character(df_app$job_titles))
 df_app <- df_app %>% select("name", "department", "job_titles", "annual_salary") %>%
   mutate(department=recode(department,
                            "Admin Hearng" = "Administrative Hearings",
@@ -38,11 +39,18 @@ df_app <- df_app %>% select("name", "department", "job_titles", "annual_salary")
                            "Transportn" = "Transportation",
                            "Water Mgmnt" = "Water Management"
                            )) %>% 
-  rename(
+  dplyr::rename(
     "Name" = name,
     "Department" = department,
-    "Job Title" = job_titles,
-    "Annual Salary" = annual_salary
+    "Job" = job_titles,
+    "Salary" = annual_salary
   )
+
+df_app <- merge(df_app, count(df_app, Department), by="Department") %>%
+  arrange(Name)
+df_app$deptFreq <- paste0(df_app$Department, " ", paste0("(",df_app$n,")"))
+
+
+
   
 
