@@ -6,40 +6,31 @@ ui <- fluidPage(
     tags$head(tags$style(
         HTML('
         #sidebar {
-            background-color: #e6f0ff;
-            }
+            background-color: #e4ebf5;
+        }
         body, label, input, button, select { 
-            font-family: "Calibri";
-            font-size: 12px;
-            }
-        #mytable tr:hover {
+            font-family: "Helvetica";
+            font-size: 11px;
+        }
+        #data tr:hover {
             background-color: #e6f0ff
-            }
+        }
+        #htmlwidget_container text {
+            font-size: 12px;
+        }
+            
             ')
     )),
-    titlePanel("App"),
+    navbarPage(id="navbar", "Application"),
+    titlePanel("City of Chicago Employee Salaries"),
+    fluidRow(
+        column(12, align="center",
+               includeHTML("..//ChicagoTreemap.html"))),
     sidebarLayout(
         sidebarPanel(id="sidebar",
             helpText("Filter employees with the following:"),
-            textInput("name",
-                      label = "Name", 
-                      placeholder = "Last Name"),
-            selectInput("dept",
-                        label = "Department",
-                        selected = NULL,
-                        choices = sort(unique(df_app$deptFreq), decreasing = FALSE),
-                        multiple = TRUE),
-            selectInput("job",
-                        label = "Job Title",
-                        selected = NULL,
-                        choices = sort(unique(df_app$Job), decreasing = FALSE),
-                        multiple = TRUE),
-            uiOutput("secondSelection"),
-            sliderInput("range", 
-                        label = "Salary Range",
-                        min = 0, max = max(df_app$`Salary`), 
-                        value = c(0, max(df_app$`Salary`))),
-            actionButton("clear", "Clear")
+            uiOutput('clearable_filters'),
+            actionButton("clear_filter", "Clear Filter")
             ),
         mainPanel(
             dataTableOutput("data")
@@ -73,10 +64,29 @@ server <- function(input, output, session) {
                                              ) %>%
                                        formatCurrency("Salary") 
     )
-
+    output$clearable_filters <- renderUI({
+        times <- input$clear_filter
+        div(id=letters[(times %% length(letters)) + 1],
+            textInput("name",
+                      label = "Name", 
+                      placeholder = "Last Name"),
+            selectInput("dept",
+                        label = "Department",
+                        selected = NULL,
+                        choices = sort(unique(df_app$deptFreq), decreasing = FALSE),
+                        multiple = TRUE),
+            selectInput("job",
+                        label = "Job Title",
+                        selected = NULL,
+                        choices = sort(unique(df_app$Job), decreasing = FALSE),
+                        multiple = TRUE),
+            uiOutput("secondSelection"),
+            sliderInput("range", 
+                        label = "Salary Range",
+                        min = 0, max = max(df_app$`Salary`), 
+                        value = c(0, max(df_app$`Salary`))))
+    })
 }
-
-
 
 # Run the application 
 shinyApp(ui = ui, server = server)
