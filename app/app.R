@@ -8,9 +8,9 @@ ui <- fluidPage(
         #sidebar {
             background-color: #e4ebf5;
         }
-        body, label, input, button, select { 
+        body, label, input, button, select, body div p { 
             font-family: "Helvetica";
-            font-size: 11px;
+            font-size: 13px;
         }
         #data tr:hover {
             background-color: #e6f0ff
@@ -18,14 +18,35 @@ ui <- fluidPage(
         #htmlwidget_container text {
             font-size: 12px;
         }
-            
+        .navbar {
+            font-size: 16px;
+        }
+        #intro div p {
+            font-size: 126px;
+        }
             ')
     )),
-    navbarPage(id="navbar", "Application"),
+    navbarPage("App Title",
+               tabPanel("Table"),
+               tabPanel("Plot"),
+               tabPanel("Table")
+    ),
     titlePanel("City of Chicago Employee Salaries"),
     fluidRow(
+        column(id="intro", 12,
+               h2("Features"),
+               p("The City of Chicago has more than 30,000 employees in 35 different departments.
+                 The table below shows salaries of every city employee that can be filtered by name,
+                 department, name, and salary range."),
+               p("Data is taken from", 
+                 a("Chicago open data portal", 
+                   href = "https://data.cityofchicago.org/"),
+                 "and last retrieved on ", format(Sys.Date(), format="%B %d %Y"),".")),
+
         column(12, align="center",
-               includeHTML("..//ChicagoTreemap.html"))),
+               includeHTML("..//ChicagoTreemap.html"),
+               hr())
+    ),
     sidebarLayout(
         sidebarPanel(id="sidebar",
             helpText("Filter employees with the following:"),
