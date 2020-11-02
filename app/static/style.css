@@ -1,0 +1,37 @@
+body {
+    -moz-transform: scale(1,1); /* Moz-browsers */
+    zoom: 1; /* Other non-webkit browsers */
+    zoom: 100%; /* Webkit browsers */
+    padding-bottom: 70px;
+}
+
+
+
+#sidebar {
+    background-color: #e4ebf5;
+}
+
+body, input, button, select {
+    font-family: "Helvetica";
+    font-size: 12px;
+}
+
+#intro {
+    font-size: 15px;
+}
+#data tr:hover {
+    background-color: #e6f0ff
+}
+
+
+#intro div p {
+    font-size: 126px;
+}
+
+.container {
+    width: 100%;
+    white-space: nowrap;
+}
+
+
+        
