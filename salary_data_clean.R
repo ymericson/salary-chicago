@@ -8,12 +8,12 @@ library(stringr)
 library(dplyr)
 library(tidyverse)
 library(htmltools)
-library(here)
 library(htmlwidgets)
 
 
 # get and clean data
 df_app <- read.socrata("https://data.cityofchicago.org/resource/n4bx-5kf6.json")
+df_date <- Sys.Date()
 cols.num <- c("frequency_description", "annual_salary","hourly_rate")
 df_app[cols.num] <- sapply(df_app[cols.num],as.numeric)
 df_app$annual_salary <- ifelse(is.na(df_app$annual_salary), 

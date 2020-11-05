@@ -5,7 +5,9 @@ body {
     padding-bottom: 70px;
 }
 
-
+.container-fluid {
+    background-color: white;
+}
 
 #sidebar {
     background-color: #e4ebf5;
