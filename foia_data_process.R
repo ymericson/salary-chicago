@@ -28,12 +28,14 @@ df_app$job_titles <- str_replace_all(df_app$job_titles,
 df_app$job_titles <- str_to_title(df_app$job_titles)
 df_app$job_titles <- gsub("\\s*\\([^\\)]+\\)","",as.character(df_app$job_titles))
 
-# overtime
-df_app$overtime_earned <- as.numeric(as.character(df_app$overtime_earned))
+# earnings
+df_app$annual_rate <- as.integer(df_app$annual_rate)
+df_app$overtime_earned <- as.integer(as.character(df_app$overtime_earned))
 df_app[is.na(df_app)] <- 0  
+df_app$tot_wages <- df_app$annual_rate + df_app$overtime_earned
 
-
-df_app <- df_app %>% select("name", "department", "job_titles", "annual_rate", "overtime_earned") %>%
+df_app <- df_app %>% select("name", "department", "job_titles", "annual_rate", 
+                            "overtime_earned", "tot_wages") %>%
   mutate(department=recode(department,
                            "Admin Hearng" = "Administrative Hearings",
                            "Animal Contrl" = "Animal Control",
@@ -54,7 +56,8 @@ df_app <- df_app %>% select("name", "department", "job_titles", "annual_rate", "
     "Department" = department,
     "Job" = job_titles,
     "Salary" = annual_rate,
-    "Overtime" = overtime_earned
+    "Overtime" = overtime_earned,
+    "Total" = tot_wages
   )
 
 df_app <- merge(df_app, count(df_app, Department), by="Department") %>%

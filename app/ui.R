@@ -6,7 +6,14 @@ source('filter_var.R')
 ui <- fluidPage(
   # includeCSS(here::here('salary-treemap', 'app/static/style.css')),
   navbarPage(id='navbar', "City of Chicago Salaries", 
-             tabPanel("Table", 
+            tabPanel("Graph", 
+                      fluidRow(
+                        column(12, align="center",
+                               includeHTML("..//ChicagoTreemap.html"),
+                               hr())
+                    )
+            ),
+            tabPanel("Table", 
                       fluidRow(
                         column(id="intro", 12,
                                h2("Summary"),
@@ -15,8 +22,7 @@ ui <- fluidPage(
                                      department, name, and salary range."),
                                p("Data is taken from", 
                                  a("Chicago open data portal", 
-                                   href = "https://data.cityofchicago.org/"),
-                                 "and last retrieved on ", format(df_date, format="%B %d %Y"),"."),
+                                   href = "https://data.cityofchicago.org/")),
                                hr()
                         ),
                       ),
@@ -31,14 +37,8 @@ ui <- fluidPage(
                         )
                       )
              
-            ),             
-            tabPanel("Graph", 
-                      fluidRow(
-                        column(12, align="center",
-                               includeHTML("..//d3tree2.html"),
-                               hr())
-                    )
-            )
+            )             
+
 
   ),
 )
