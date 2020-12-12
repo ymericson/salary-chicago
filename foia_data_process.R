@@ -2,7 +2,7 @@
 library(treemap)
 library(d3treeR)
 library(rjson)
-library(RSocrata)
+library(readxl)
 library(tools)
 library(stringr)
 library(dplyr)
@@ -12,16 +12,15 @@ library(htmlwidgets)
 
 
 # get and clean data
-df_app <- read.socrata("https://data.cityofchicago.org/resource/n4bx-5kf6.json")
-# df_date <- Sys.Date()
-cols.num <- c("frequency_description", "annual_salary","hourly_rate")
-df_app[cols.num] <- sapply(df_app[cols.num],as.numeric)
-df_app$annual_salary <- ifelse(is.na(df_app$annual_salary), 
-                               df_app$frequency_description * df_app$hourly_rate * 50, 
-                               df_app$annual_salary)
+df_app <- read_excel('data/foia_salary_11092020.csv')
+
+# name
+df_app <- df_app %>% mutate(name = paste(last,",",first,"",mi))
 df_app$name <- str_to_title(df_app$name)
-df_app$department <- str_to_title(df_app$department)
-df_app$job_titles <-gsub('^([0-9]+)|([IVXLCM]+)\\.?$','', df_app$job_titles)
+
+# dept & job titles
+df_app$department <- str_to_title(df_app$dept_description)
+df_app$job_titles <-gsub('^([0-9]+)|([IVXLCM]+)\\.?$','', df_app$title_description)
 df_app$job_titles <- str_replace_all(df_app$job_titles,
                                      c("DIR" = "DIRECTOR",
                                        "SUPVSR" = "SUPERVISOR",
@@ -29,7 +28,12 @@ df_app$job_titles <- str_replace_all(df_app$job_titles,
 df_app$job_titles <- str_to_title(df_app$job_titles)
 df_app$job_titles <- gsub("\\s*\\([^\\)]+\\)","",as.character(df_app$job_titles))
 
-df_app <- df_app %>% select("name", "department", "job_titles", "annual_salary") %>%
+# overtime
+df_app$overtime_earned <- as.numeric(as.character(df_app$overtime_earned))
+df_app[is.na(df_app)] <- 0  
+
+
+df_app <- df_app %>% select("name", "department", "job_titles", "annual_rate", "overtime_earned") %>%
   mutate(department=recode(department,
                            "Admin Hearng" = "Administrative Hearings",
                            "Animal Contrl" = "Animal Control",
@@ -44,19 +48,15 @@ df_app <- df_app %>% select("name", "department", "job_titles", "annual_salary")
                            "Streets & San" = "Streets and Sanitation",
                            "Transportn" = "Transportation",
                            "Water Mgmnt" = "Water Management"
-                           )) %>% 
+  )) %>% 
   dplyr::rename(
     "Name" = name,
     "Department" = department,
     "Job" = job_titles,
-    "Salary" = annual_salary
+    "Salary" = annual_rate,
+    "Overtime" = overtime_earned
   )
 
 df_app <- merge(df_app, count(df_app, Department), by="Department") %>%
   arrange(Name)
 df_app$deptFreq <- paste0(df_app$Department, " ", paste0("(",df_app$n,")"))
-
-
-
-  
-

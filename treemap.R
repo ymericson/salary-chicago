@@ -96,4 +96,4 @@ chicago_inter <- d3tree2(chicago_treemap,  rootname="Salaries",
                          height = 460, width = 900)
 
 # save the widget
-saveWidget(chicago_inter, file = here("/salary-treemap/ChicagoTreemap.html"))
+saveWidget(chicago_inter, file = here("figures/ChicagoTreemap.html"))
