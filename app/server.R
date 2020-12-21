@@ -1,6 +1,10 @@
 library(shiny)
 library(DT)
+library(tidyverse)
+library(dplyr)
 source('filter_var.R')
+
+df_app <- read.csv(here("data/df_app.csv"))
 
 server <- function(input, output, session) {
   selected <- reactive({
