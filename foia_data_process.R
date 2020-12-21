@@ -9,10 +9,11 @@ library(dplyr)
 library(tidyverse)
 library(htmltools)
 library(htmlwidgets)
+library(here)
 
 
 # get and clean data
-df_app <- read_excel('data/foia_salary_11092020.csv')
+df_app <- read_excel(here("data/foia_salary_11092020.csv"))
 
 # name
 df_app <- df_app %>% mutate(name = paste(last,",",first,"",mi))

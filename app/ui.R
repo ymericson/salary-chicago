@@ -1,5 +1,6 @@
 library(shiny)
 library(DT)
+library(here)
 source('filter_var.R')
 
 # Define UI for application that draws a histogram
@@ -9,7 +10,7 @@ ui <- fluidPage(
             tabPanel("Graph", 
                       fluidRow(
                         column(12, align="center",
-                               includeHTML("..//ChicagoTreemap.html"),
+                               includeHTML(here("figures/ChicagoTreemap.html")),
                                hr())
                     )
             ),

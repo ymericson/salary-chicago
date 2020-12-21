@@ -92,8 +92,8 @@ chicago_treemap <- treemap(df,
 )            
 
 # make it interactive
-chicago_inter <- d3tree2(chicago_treemap,  rootname="Salaries",
+chicago_treemap <- d3tree2(chicago_treemap,  rootname="Salaries",
                          height = 460, width = 900)
 
 # save the widget
-saveWidget(chicago_inter, file = here("figures/ChicagoTreemap.html"))
+saveWidget(chicago_treemap, file = here("figures/ChicagoTreemap.html"))

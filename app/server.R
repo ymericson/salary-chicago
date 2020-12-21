@@ -10,7 +10,7 @@ server <- function(input, output, session) {
       filter_var(df_app$Salary, input$salary_range) &
       filter_var(df_app$Overtime, input$overtime_range)
   })
-  output$data <- renderDataTable(datatable(df_app[selected(),] %>% 
+  output$data <- renderDataTable(datatable(na_if(df_app, 0)[selected(),] %>% 
                                              select("Name", "Department", "Job", 
                                                     "Salary", "Overtime", "Total"),
                                            options = list(pageLength = 25,
