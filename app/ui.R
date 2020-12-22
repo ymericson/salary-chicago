@@ -21,9 +21,6 @@ ui <- fluidPage(
                                p("The City of Chicago has more than 30,000 employees in 35 different departments.
                                      The table below shows salaries of every city employee that can be filtered by name,
                                      department, name, and salary range."),
-                               p("Data is taken from", 
-                                 a("Chicago open data portal", 
-                                   href = "https://data.cityofchicago.org/")),
                                hr()
                         ),
                       ),
