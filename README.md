@@ -1,9 +1,9 @@
 ## 2020 City of Chicago Salaries
 
-This R Shiny app shows salaries for Chicago of Chicago employees in calendar year 2020. The goal of this project was to
-get a visual representation of how the city allocates its salary budget, and filter employees by salary and overtime pay. 
+This R Shiny app shows salaries for Chicago of Chicago employees in calendar year 2020. The goal of this project is to 
+visually represent how the city allocates its salary budget, and to filter each employees by department and pay. 
 
-Here are the departments sorted by most salary + overtime pay:
+Here are the departments sorted by highest allocation of salary + overtime pay:
 - Police: 43.9%
 - Fire: 17.7%
 - Water Mgmt: 6.2%
@@ -11,7 +11,13 @@ Here are the departments sorted by most salary + overtime pay:
 - Aviation: 4.8%
 - Transportation: 3.6%
 
+## Layout 
 
+#### Treemap:
+![Treemap](figures/treemap.gif)
+
+#### Table:
+![Table](figures/table.gif)
 
 ## Data
 
