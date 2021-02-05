@@ -2,7 +2,7 @@
 
 http://chicago-salary.herokuapp.com/
 
-This R Shiny app shows salaries for Chicago of Chicago employees in calendar year 2020. The goal of this project is to 
+This R Shiny app shows salaries for City of Chicago employees in calendar year 2020. The goal of this project is to 
 visually represent how the city allocates its salary budget, and to filter each employees by department and pay. 
 
 The idea for this project came from the [numerous](https://www.chicagotribune.com/politics/ct-chicago-overtime-unrest-lightfoot-20201006-tjiqh37anjdf5lilbpodk7blva-story.html)
