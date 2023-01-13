@@ -8,7 +8,7 @@ df_app <- read.csv(here("data/df_app.csv"))
 
 server <- function(input, output, session) {
   selected <- reactive({
-    str_detect(str_split_fixed(df_app$Name, ",", 2)[,1], str_to_title(paste(input$name, " "))) &
+    str_detect(paste(" ", str_split_fixed(df_app$Name, ",", 2)[,1]), str_to_title(paste(" ", input$name))) &
       filter_var(df_app$deptFreq, input$dept) &
       filter_var(df_app$Job, input$job) &    
       filter_var(df_app$Salary, input$salary_range) &
